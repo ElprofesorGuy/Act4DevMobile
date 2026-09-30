@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CalculatriceMaui.MainPage"
+             Title="Standard"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F3F7, Dark=#0F1115}">
+
+    <ContentPage.Resources>
+        <Style x:Key="KeyBase" TargetType="Button">
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinimumWidthRequest" Value="0" />
+            <Setter Property="MinimumHeightRequest" Value="0" />
+        </Style>
+        <Style x:Key="DigitKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#FFFFFF, Dark=#262A33}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#1B1D22, Dark=#FFFFFF}" />
+        </Style>
+        <Style x:Key="FunctionKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#DCDFE6, Dark=#3B404C}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#1B1D22, Dark=#FFFFFF}" />
+        </Style>
+        <Style x:Key="OperatorKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="BackgroundColor" Value="#FF9F0A" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+        </Style>
+        <Style x:Key="EqualsKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="BackgroundColor" Value="#2FBF71" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid x:Name="RootGrid" Padding="14" RowSpacing="12" ColumnSpacing="14">
+        <Border x:Name="DisplayCard" Grid.Row="0" Grid.Column="0"
+                StrokeThickness="0" Padding="18,14"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1A1D24}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="26" />
+            </Border.StrokeShape>
+
+            <Grid RowDefinitions="Auto,*">
+                <Label x:Name="TitleLabel" Grid.Row="0" Text="CALCULATRICE  /  STANDARD"
+                       FontSize="12" CharacterSpacing="1.4" VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light=#747B89, Dark=#AEB4C2}" />
+                <VerticalStackLayout Grid.Row="1" VerticalOptions="End" Spacing="2">
+                    <ScrollView x:Name="ExpressionScroll" Orientation="Horizontal"
+                                HorizontalScrollBarVisibility="Never">
+                        <Label x:Name="ExpressionLabel" Text=" " FontSize="20"
+                               HorizontalTextAlignment="End" LineBreakMode="NoWrap"
+                               TextColor="{AppThemeBinding Light=#7A8090, Dark=#8A90A0}"
+                               SemanticProperties.Description="Opération en cours" />
+                    </ScrollView>
+                    <Label x:Name="ResultLabel" Text="0" FontSize="64"
+                           HorizontalTextAlignment="End" LineBreakMode="NoWrap" MaxLines="1"
+                           TextColor="{AppThemeBinding Light=#1B1D22, Dark=#FFFFFF}"
+                           SemanticProperties.Description="Résultat" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="KeypadPanel" Grid.Row="1" Grid.Column="0" RowSpacing="9" ColumnSpacing="9"
+              RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*,*">
+            <Button Grid.Row="0" Grid.Column="0" Text="C" Style="{StaticResource FunctionKey}"
+                    CommandParameter="CLEAR" Clicked="OnActionClicked" SemanticProperties.Description="Remise à zéro" />
+            <Button Grid.Row="0" Grid.Column="1" Text="⌫" Style="{StaticResource FunctionKey}"
+                    CommandParameter="BACK" Clicked="OnActionClicked" SemanticProperties.Description="Effacer le dernier caractère" />
+            <Button Grid.Row="0" Grid.Column="2" Text="%" Style="{StaticResource FunctionKey}"
+                    CommandParameter="PERCENT" Clicked="OnActionClicked" SemanticProperties.Description="Pourcentage" />
+            <Button Grid.Row="0" Grid.Column="3" Text="÷" Style="{StaticResource OperatorKey}"
+                    CommandParameter="÷" Clicked="OnOperatorClicked" SemanticProperties.Description="Diviser" />
+
+            <Button Grid.Row="1" Grid.Column="0" Text="7" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="1" Grid.Column="1" Text="8" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="1" Grid.Column="2" Text="9" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="1" Grid.Column="3" Text="×" Style="{StaticResource OperatorKey}"
+                    CommandParameter="×" Clicked="OnOperatorClicked" SemanticProperties.Description="Multiplier" />
+
+            <Button Grid.Row="2" Grid.Column="0" Text="4" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="2" Grid.Column="1" Text="5" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="2" Grid.Column="2" Text="6" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="2" Grid.Column="3" Text="−" Style="{StaticResource OperatorKey}"
+                    CommandParameter="−" Clicked="OnOperatorClicked" SemanticProperties.Description="Soustraire" />
+
+            <Button Grid.Row="3" Grid.Column="0" Text="1" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="3" Grid.Column="1" Text="2" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="3" Grid.Column="2" Text="3" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="3" Grid.Column="3" Text="+" Style="{StaticResource OperatorKey}"
+                    CommandParameter="+" Clicked="OnOperatorClicked" SemanticProperties.Description="Additionner" />
+
+            <Button Grid.Row="4" Grid.Column="0" Text="±" Style="{StaticResource FunctionKey}"
+                    CommandParameter="SIGN" Clicked="OnActionClicked" SemanticProperties.Description="Changer le signe" />
+            <Button Grid.Row="4" Grid.Column="1" Text="0" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+            <Button Grid.Row="4" Grid.Column="2" Text="," Style="{StaticResource DigitKey}"
+                    CommandParameter="DOT" Clicked="OnActionClicked" SemanticProperties.Description="Virgule décimale" />
+            <Button Grid.Row="4" Grid.Column="3" Text="=" Style="{StaticResource EqualsKey}"
+                    CommandParameter="EQUALS" Clicked="OnActionClicked" SemanticProperties.Description="Égal" />
+        </Grid>
+    </Grid>
+</ContentPage>

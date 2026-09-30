@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CalculatriceMaui.ScientificPage"
+             Title="Scientifique"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F3F7, Dark=#0F1115}">
+
+    <ContentPage.Resources>
+        <Style x:Key="KeyBase" TargetType="Button">
+            <Setter Property="FontFamily" Value="OpenSansRegular" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinimumWidthRequest" Value="0" />
+            <Setter Property="MinimumHeightRequest" Value="0" />
+            <Setter Property="HeightRequest" Value="50" />
+        </Style>
+        <Style x:Key="DigitKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="FontSize" Value="21" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#FFFFFF, Dark=#262A33}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#1B1D22, Dark=#FFFFFF}" />
+        </Style>
+        <Style x:Key="FunctionKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#E1E4EA, Dark=#30343D}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#343A46, Dark=#F3F4F6}" />
+        </Style>
+        <Style x:Key="FunctionKeyActive" TargetType="Button" BasedOn="{StaticResource FunctionKey}">
+            <Setter Property="BackgroundColor" Value="#B85C00" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+        </Style>
+        <Style x:Key="OperatorKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="FontSize" Value="21" />
+            <Setter Property="BackgroundColor" Value="#B85C00" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+        </Style>
+        <Style x:Key="EqualsKey" TargetType="Button" BasedOn="{StaticResource KeyBase}">
+            <Setter Property="FontSize" Value="21" />
+            <Setter Property="BackgroundColor" Value="#16703E" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid x:Name="RootGrid" Padding="12" RowSpacing="10" ColumnSpacing="12">
+        <Border x:Name="DisplayCard" Grid.Row="0" Grid.Column="0"
+                StrokeThickness="0" Padding="16,12"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1A1D24}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="22" />
+            </Border.StrokeShape>
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
+                <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                    <Label Text="CALCULATRICE  /  SCIENTIFIQUE" FontSize="11" CharacterSpacing="1"
+                           TextColor="{AppThemeBinding Light=#747B89, Dark=#AEB4C2}" />
+                    <Label x:Name="MemoryLabel" Text="M" IsVisible="False" FontSize="12"
+                           FontAttributes="Bold" TextColor="#B85C00"
+                           SemanticProperties.Description="Une valeur est en mémoire" />
+                    <Label x:Name="AngleLabel" Text="DEG" FontSize="11" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#747B89, Dark=#AEB4C2}" />
+                </HorizontalStackLayout>
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                     VerticalOptions="End" Spacing="2">
+                    <ScrollView x:Name="ExpressionScroll" Orientation="Horizontal"
+                                HorizontalScrollBarVisibility="Never">
+                        <Label x:Name="ExpressionLabel" Text=" " FontSize="18"
+                               HorizontalTextAlignment="End" LineBreakMode="NoWrap"
+                               TextColor="{AppThemeBinding Light=#7A8090, Dark=#8A90A0}"
+                               SemanticProperties.Description="Opération en cours" />
+                    </ScrollView>
+                    <Label x:Name="ResultLabel" Text="0" FontSize="56"
+                           HorizontalTextAlignment="End" LineBreakMode="NoWrap" MaxLines="1"
+                           TextColor="{AppThemeBinding Light=#1B1D22, Dark=#FFFFFF}"
+                           SemanticProperties.Description="Résultat" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <ScrollView x:Name="KeypadScroll" Grid.Row="1" Grid.Column="0"
+                    Orientation="Vertical" VerticalScrollBarVisibility="Never">
+            <Grid x:Name="KeypadPanel" RowSpacing="7" ColumnSpacing="7"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*,*,*">
+                <Button Grid.Row="0" Grid.Column="0" Text="MC" Style="{StaticResource FunctionKey}" CommandParameter="MC" Clicked="OnMemoryClicked" SemanticProperties.Description="Effacer la mémoire" />
+                <Button Grid.Row="0" Grid.Column="1" Text="MR" Style="{StaticResource FunctionKey}" CommandParameter="MR" Clicked="OnMemoryClicked" SemanticProperties.Description="Rappeler la mémoire" />
+                <Button Grid.Row="0" Grid.Column="2" Text="M+" Style="{StaticResource FunctionKey}" CommandParameter="MPLUS" Clicked="OnMemoryClicked" SemanticProperties.Description="Ajouter à la mémoire" />
+                <Button Grid.Row="0" Grid.Column="3" Text="M−" Style="{StaticResource FunctionKey}" CommandParameter="MMINUS" Clicked="OnMemoryClicked" SemanticProperties.Description="Soustraire de la mémoire" />
+                <Button Grid.Row="0" Grid.Column="4" Text="MS" Style="{StaticResource FunctionKey}" CommandParameter="MS" Clicked="OnMemoryClicked" SemanticProperties.Description="Enregistrer en mémoire" />
+
+                <Button Grid.Row="1" Grid.Column="0" x:Name="SecondButton" Text="2nd" Style="{StaticResource FunctionKey}" Clicked="OnSecondClicked" SemanticProperties.Description="Fonctions trigonométriques réciproques" />
+                <Button Grid.Row="1" Grid.Column="1" x:Name="AngleButton" Text="DEG" Style="{StaticResource FunctionKey}" Clicked="OnAngleModeClicked" SemanticProperties.Description="Basculer entre degrés et radians" />
+                <Button Grid.Row="1" Grid.Column="2" Text="π" Style="{StaticResource FunctionKey}" CommandParameter="Pi" Clicked="OnConstantClicked" SemanticProperties.Description="Pi" />
+                <Button Grid.Row="1" Grid.Column="3" Text="e" Style="{StaticResource FunctionKey}" CommandParameter="E" Clicked="OnConstantClicked" SemanticProperties.Description="Nombre d'Euler" />
+                <Button Grid.Row="1" Grid.Column="4" Text="C" Style="{StaticResource FunctionKey}" CommandParameter="CLEAR" Clicked="OnActionClicked" SemanticProperties.Description="Remise à zéro" />
+
+                <Button Grid.Row="2" Grid.Column="0" x:Name="SinButton" Text="sin" Style="{StaticResource FunctionKey}" CommandParameter="Sin" Clicked="OnUnaryClicked" SemanticProperties.Description="Sinus" />
+                <Button Grid.Row="2" Grid.Column="1" x:Name="CosButton" Text="cos" Style="{StaticResource FunctionKey}" CommandParameter="Cos" Clicked="OnUnaryClicked" SemanticProperties.Description="Cosinus" />
+                <Button Grid.Row="2" Grid.Column="2" x:Name="TanButton" Text="tan" Style="{StaticResource FunctionKey}" CommandParameter="Tan" Clicked="OnUnaryClicked" SemanticProperties.Description="Tangente" />
+                <Button Grid.Row="2" Grid.Column="3" Text="√" Style="{StaticResource FunctionKey}" CommandParameter="SquareRoot" Clicked="OnUnaryClicked" SemanticProperties.Description="Racine carrée" />
+                <Button Grid.Row="2" Grid.Column="4" Text="x²" Style="{StaticResource FunctionKey}" CommandParameter="Square" Clicked="OnUnaryClicked" SemanticProperties.Description="Carré" />
+
+                <Button Grid.Row="3" Grid.Column="0" Text="1/x" Style="{StaticResource FunctionKey}" CommandParameter="Inverse" Clicked="OnUnaryClicked" SemanticProperties.Description="Inverse" />
+                <Button Grid.Row="3" Grid.Column="1" Text="xʸ" Style="{StaticResource FunctionKey}" CommandParameter="^" Clicked="OnOperatorClicked" SemanticProperties.Description="Puissance" />
+                <Button Grid.Row="3" Grid.Column="2" Text="n!" Style="{StaticResource FunctionKey}" CommandParameter="Factorial" Clicked="OnUnaryClicked" SemanticProperties.Description="Factorielle" />
+                <Button Grid.Row="3" Grid.Column="3" Text="ln" Style="{StaticResource FunctionKey}" CommandParameter="Ln" Clicked="OnUnaryClicked" SemanticProperties.Description="Logarithme népérien" />
+                <Button Grid.Row="3" Grid.Column="4" Text="log" Style="{StaticResource FunctionKey}" CommandParameter="Log" Clicked="OnUnaryClicked" SemanticProperties.Description="Logarithme décimal" />
+
+                <Button Grid.Row="4" Grid.Column="0" Text="nCr" Style="{StaticResource FunctionKey}" CommandParameter="C" Clicked="OnOperatorClicked" SemanticProperties.Description="Combinaisons" />
+                <Button Grid.Row="4" Grid.Column="1" Text="nPr" Style="{StaticResource FunctionKey}" CommandParameter="A" Clicked="OnOperatorClicked" SemanticProperties.Description="Arrangements" />
+                <Button Grid.Row="4" Grid.Column="2" Text="n/d" Style="{StaticResource FunctionKey}" Clicked="OnFractionBarClicked" SemanticProperties.Description="Saisir une fraction" />
+                <Button Grid.Row="4" Grid.Column="3" x:Name="FractionButton" Text="Frac ↔ Déc" FontSize="11" Style="{StaticResource FunctionKey}" CommandParameter="Fraction" Clicked="OnResultFormatClicked" SemanticProperties.Description="Basculer entre fraction et décimal" />
+                <Button Grid.Row="4" Grid.Column="4" x:Name="SciButton" Text="Sci" Style="{StaticResource FunctionKey}" CommandParameter="Scientific" Clicked="OnResultFormatClicked" SemanticProperties.Description="Écriture scientifique" />
+
+                <Button Grid.Row="5" Grid.Column="0" Text="7" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="5" Grid.Column="1" Text="8" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="5" Grid.Column="2" Text="9" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="5" Grid.Column="3" Text="÷" Style="{StaticResource OperatorKey}" CommandParameter="÷" Clicked="OnOperatorClicked" SemanticProperties.Description="Diviser" />
+                <Button Grid.Row="5" Grid.Column="4" Text="⌫" Style="{StaticResource FunctionKey}" CommandParameter="BACK" Clicked="OnActionClicked" SemanticProperties.Description="Effacer le dernier caractère" />
+
+                <Button Grid.Row="6" Grid.Column="0" Text="4" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="6" Grid.Column="1" Text="5" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="6" Grid.Column="2" Text="6" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="6" Grid.Column="3" Text="×" Style="{StaticResource OperatorKey}" CommandParameter="×" Clicked="OnOperatorClicked" SemanticProperties.Description="Multiplier" />
+                <Button Grid.Row="6" Grid.Column="4" Text="%" Style="{StaticResource FunctionKey}" CommandParameter="PERCENT" Clicked="OnActionClicked" SemanticProperties.Description="Pourcentage" />
+
+                <Button Grid.Row="7" Grid.Column="0" Text="1" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="7" Grid.Column="1" Text="2" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="7" Grid.Column="2" Text="3" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="7" Grid.Column="3" Text="−" Style="{StaticResource OperatorKey}" CommandParameter="−" Clicked="OnOperatorClicked" SemanticProperties.Description="Soustraire" />
+                <Button Grid.Row="7" Grid.Column="4" Text="+" Style="{StaticResource OperatorKey}" CommandParameter="+" Clicked="OnOperatorClicked" SemanticProperties.Description="Additionner" />
+
+                <Button Grid.Row="8" Grid.Column="0" Text="±" Style="{StaticResource FunctionKey}" CommandParameter="SIGN" Clicked="OnActionClicked" SemanticProperties.Description="Changer le signe" />
+                <Button Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Text="0" Style="{StaticResource DigitKey}" Clicked="OnDigitClicked" />
+                <Button Grid.Row="8" Grid.Column="3" Text="," Style="{StaticResource DigitKey}" CommandParameter="DOT" Clicked="OnActionClicked" SemanticProperties.Description="Virgule décimale" />
+                <Button Grid.Row="8" Grid.Column="4" Text="=" Style="{StaticResource EqualsKey}" CommandParameter="EQUALS" Clicked="OnActionClicked" SemanticProperties.Description="Égal" />
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>
